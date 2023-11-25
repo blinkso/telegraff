@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "ua.blink.telegraff"
-version = "1.0.8"
+version = "1.0.9"
 
 allprojects {
     repositories {
@@ -73,13 +73,13 @@ subprojects {
         compileKotlin {
             kotlinOptions {
                 freeCompilerArgs = listOf("-Xjsr305=strict")
-                jvmTarget = "17"
+                jvmTarget = JavaVersion.VERSION_17.majorVersion
             }
         }
         compileTestKotlin {
             kotlinOptions {
                 freeCompilerArgs = listOf("-Xjsr305=strict")
-                jvmTarget = "17"
+                jvmTarget = JavaVersion.VERSION_17.majorVersion
             }
         }
 
@@ -124,7 +124,7 @@ subprojects {
                         developer {
                             id.set("gazanfarov")
                             name.set("Ruslan Gazanfarov")
-                            email.set("ruslan.gazanfarov@blink.so")
+                            email.set("ruslan.gazanfarov@eventmate.email")
                         }
                     }
                 }
