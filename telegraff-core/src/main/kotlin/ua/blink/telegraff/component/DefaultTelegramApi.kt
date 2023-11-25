@@ -3,9 +3,11 @@ package ua.blink.telegraff.component
 import org.slf4j.LoggerFactory
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.core.io.ByteArrayResource
+import org.springframework.http.codec.CodecConfigurer
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.reactive.function.BodyInserters
 import org.springframework.web.reactive.function.client.ClientResponse
+import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 import reactor.util.retry.Retry
@@ -20,10 +22,24 @@ class DefaultTelegramApi(
 
     private val restTemplate = WebClient.builder()
         .baseUrl("https://api.telegram.org/bot$telegramAccessKey")
+        .exchangeStrategies(
+            ExchangeStrategies.builder()
+                .codecs(this::configureCodecs)
+                .build()
+        )
         .build()
     private val fileRestTemplate = WebClient.builder()
         .baseUrl("https://api.telegram.org/file/bot$telegramAccessKey")
+        .exchangeStrategies(
+            ExchangeStrategies.builder()
+                .codecs(this::configureCodecs)
+                .build()
+        )
         .build()
+
+    private fun configureCodecs(configurer: CodecConfigurer) {
+        configurer.defaultCodecs().maxInMemorySize(16 * 1024 * 1024) // 16MB
+    }
 
     override fun getMe(): TelegramUser {
         return restTemplate.get()
@@ -171,9 +187,6 @@ class DefaultTelegramApi(
             .post()
             .uri("/sendDocument")
             .body(BodyInserters.fromMultipartData(formData))
-//            .headers { headers ->
-//                headers.contentType = MediaType.MULTIPART_FORM_DATA
-//            }
             .retrieve()
             .onStatus(
                 { status -> status.isError },
@@ -199,9 +212,6 @@ class DefaultTelegramApi(
             .post()
             .uri("/sendPhoto")
             .body(BodyInserters.fromMultipartData(formData))
-//            .headers { headers ->
-//                headers.contentType = MediaType.MULTIPART_FORM_DATA
-//            }
             .retrieve()
             .onStatus(
                 { status -> status.isError },
@@ -227,9 +237,6 @@ class DefaultTelegramApi(
             .post()
             .uri("/sendVoice")
             .body(BodyInserters.fromMultipartData(formData))
-//            .headers { headers ->
-//                headers.contentType = MediaType.MULTIPART_FORM_DATA
-//            }
             .retrieve()
             .onStatus(
                 { status -> status.isError },
