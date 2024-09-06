@@ -1,5 +1,6 @@
 package ua.blink.telegraff.dsl
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -10,21 +11,24 @@ import org.slf4j.LoggerFactory
 import org.springframework.context.support.GenericApplicationContext
 import org.springframework.core.io.Resource
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Component
 import javax.script.ScriptEngineFactory
 import kotlin.coroutines.CoroutineContext
 
 @Component
 class DefaultHandlersFactory(
+    handlersPath: String,
     private val context: GenericApplicationContext,
-    handlersPath: String
+    private val redisTemplate: RedisTemplate<String, String>,
+    private val objectMapper: ObjectMapper
 ) : HandlersFactory, CoroutineScope {
 
     override val coroutineContext: CoroutineContext
         get() = Job() + Dispatchers.Default
 
     private val resolver = PathMatchingResourcePatternResolver(javaClass.classLoader)
-    private val handlers: MutableMap<String, Handler> = hashMapOf()
+    private val redisKeyPrefix = "handler:"
 
     init {
         launch {
@@ -68,7 +72,9 @@ class DefaultHandlersFactory(
     private fun addHandler(handler: Handler) {
         for (rawCommand in handler.commands) {
             val command = rawCommand.lowercase()
-            val previousValue = handlers.put(command, handler)
+            val redisKey = "$redisKeyPrefix$command"
+            val handlerJson = objectMapper.writeValueAsString(handler)
+            val previousValue = redisTemplate.opsForValue().getAndSet(redisKey, handlerJson)
             if (previousValue != null) {
                 throw IllegalArgumentException("$command is already in use.")
             }
@@ -76,7 +82,12 @@ class DefaultHandlersFactory(
     }
 
     override fun getHandlers(): Map<String, Handler> {
-        return handlers
+        val keys = redisTemplate.keys("$redisKeyPrefix*")
+        return keys.associate { key ->
+            val command = key.removePrefix(redisKeyPrefix)
+            val handlerJson = redisTemplate.opsForValue().get(key)
+            command to objectMapper.readValue(handlerJson!!, Handler::class.java)
+        }
     }
 
     companion object {
