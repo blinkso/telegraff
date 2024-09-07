@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "ua.blink.telegraff"
-version = "1.0.12"
+version = "1.0.14"
 
 allprojects {
     repositories {
