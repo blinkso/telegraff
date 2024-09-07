@@ -41,16 +41,6 @@ class TelegramProperties {
     var handlersPath = "handlers"
 
     /**
-     * Redis hostname pointing to where it's available
-     */
-    var redisHostName: String = ""
-
-    /**
-     * Redis port
-     */
-    var redisPort: Int = 0
-
-    /**
      * UnresolvedMessageFilter properties.
      */
     var unresolvedFilter = UnresolvedMessageFilterProperties()

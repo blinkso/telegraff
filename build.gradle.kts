@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "ua.blink.telegraff"
-version = "1.0.13"
+version = "1.0.14"
 
 allprojects {
     repositories {
@@ -45,9 +45,7 @@ subprojects {
 
     configure<DependencyManagementExtension> {
         val springBootVersion = "3.0.5"
-        val lettuceVersion = "6.2.1.RELEASE"
         imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
-        imports { mavenBom("io.lettuce:lettuce-core:${lettuceVersion}") }
     }
 
     sourceSets["main"].java.srcDirs("src/main/kotlin")
