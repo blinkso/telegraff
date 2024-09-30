@@ -4,14 +4,14 @@ plugins {
     id("java")
     id("idea")
     id("maven-publish")
-    id("org.jetbrains.kotlin.jvm") version "1.8.10"
-    id("org.jetbrains.kotlin.kapt") version "1.8.10"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.8.10"
+    id("org.jetbrains.kotlin.jvm") version "1.8.0"
+    id("org.jetbrains.kotlin.kapt") version "1.8.0"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.8.0"
     id("org.springframework.boot") version "3.0.5"
 }
 
 group = "ua.blink.telegraff"
-version = "1.0.14"
+version = "1.0.15"
 
 allprojects {
     repositories {
