@@ -26,6 +26,11 @@ fun String.allLocalizedValues(): Set<String> {
         ).getString(this),
         ResourceBundle.getBundle(
             "strings",
+            Locale(POLISH_LOCALE),
+            UTF8Control()
+        ).getString(this),
+        ResourceBundle.getBundle(
+            "strings",
             Locale(PORTUGUESE_LOCALE),
             UTF8Control()
         ).getString(this),
@@ -52,6 +57,7 @@ const val UKRAINIAN_LOCALE = "uk"
 const val ENGLISH_LOCALE = "en"
 const val PORTUGUESE_LOCALE = "pt"
 const val SPANISH_LOCALE = "es"
+const val POLISH_LOCALE = "pl"
 
 // https://stackoverflow.com/questions/42245519/datetimeformatter-not-work-with-llll-pattern-in-en-locale
 val LOCALES_WITH_STANDALONE_CASE = setOf(RUSSIAN_LOCALE, UKRAINIAN_LOCALE)

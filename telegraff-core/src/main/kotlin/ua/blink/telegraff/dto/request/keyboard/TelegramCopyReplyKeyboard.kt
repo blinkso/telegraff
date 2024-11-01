@@ -2,15 +2,9 @@ package ua.blink.telegraff.dto.request.keyboard
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class TelegramInlineUrlReplyKeyboard(
+class TelegramCopyReplyKeyboard(
     @get:JsonProperty("text")
     val text: String,
-    @get:JsonProperty("url")
-    val url: String = "",
-    @get:JsonProperty("callback_data")
-    val callbackData: String = "",
-    @get:JsonProperty("copy_text")
-    val copyText: TelegramCopyReplyKeyboard? = null
 ) : TelegramReplyKeyboard() {
 
     override fun equals(other: Any?): Boolean {
@@ -21,8 +15,6 @@ class TelegramInlineUrlReplyKeyboard(
         other as TelegramInlineUrlReplyKeyboard
 
         if (text != other.text) return false
-        if (url != other.url) return false
-        if (callbackData != other.callbackData) return false
 
         return true
     }
@@ -30,8 +22,6 @@ class TelegramInlineUrlReplyKeyboard(
     override fun hashCode(): Int {
         var result = super.hashCode()
         result = 31 * result + text.hashCode()
-        result = 31 * result + url.hashCode()
-        result = 31 * result + callbackData.hashCode()
         return result
     }
 }
