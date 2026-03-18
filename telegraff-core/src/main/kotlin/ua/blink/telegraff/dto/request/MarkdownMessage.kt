@@ -7,17 +7,19 @@ class MarkdownMessage(
     text: String,
     vararg replies: String,
     cancelButtonText: String? = null,
-    chatId: Long = 0
+    chatId: Long = 0,
+    linkPreviewOptions: TelegramLinkPreviewOptions? = null
 ) : TelegramMessageSendRequest(
-    chatId,
-    text,
-    TelegramParseMode.MARKDOWN,
-    if (replies.isNotEmpty()) {
+    chatId = chatId,
+    text = text,
+    parseMode = TelegramParseMode.MARKDOWN,
+    replyMarkup = if (replies.isNotEmpty()) {
         TelegramMarkupReplyKeyboard(
             answers = replies.asList(),
             cancelButtonText = cancelButtonText
         )
     } else {
         TelegramRemoveReplyKeyboard()
-    }
+    },
+    linkPreviewOptions = linkPreviewOptions
 )

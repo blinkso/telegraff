@@ -17,8 +17,8 @@ open class TelegramMessageSendRequest(
 
     disableNotification: Boolean = false,
 
-    @get:JsonProperty("disable_web_page_preview")
-    val disableWebPagePreview: Boolean = false
+    @get:JsonProperty("link_preview_options")
+    val linkPreviewOptions: TelegramLinkPreviewOptions? = null
 ) : TelegramSendRequest(chatId, replyMarkup, disableNotification) {
 
     override fun equals(other: Any?): Boolean {
@@ -28,7 +28,7 @@ open class TelegramMessageSendRequest(
 
         if (text != other.text) return false
         if (parseMode != other.parseMode) return false
-        if (disableWebPagePreview != other.disableWebPagePreview) return false
+        if (linkPreviewOptions != other.linkPreviewOptions) return false
 
         return true
     }
@@ -37,11 +37,11 @@ open class TelegramMessageSendRequest(
         var result = super.hashCode()
         result = 31 * result + text.hashCode()
         result = 31 * result + parseMode.hashCode()
-        result = 31 * result + disableWebPagePreview.hashCode()
+        result = 31 * result + (linkPreviewOptions?.hashCode() ?: 0)
         return result
     }
 
     override fun toString(): String {
-        return "TelegramMessageSendRequest(text='$text', parseMode=$parseMode, disableWebPagePreview=$disableWebPagePreview)"
+        return "TelegramMessageSendRequest(text='$text', parseMode=$parseMode, linkPreviewOptions=$linkPreviewOptions)"
     }
 }

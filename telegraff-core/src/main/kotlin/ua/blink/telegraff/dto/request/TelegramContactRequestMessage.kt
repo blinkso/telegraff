@@ -9,10 +9,13 @@ open class TelegramContactRequestMessage(
 
     buttonText: String,
 
-    cancelButtonText: String? = null
+    cancelButtonText: String? = null,
+
+    linkPreviewOptions: TelegramLinkPreviewOptions? = null
 ) : TelegramMessageSendRequest(
     chatId = chatId,
     text = text,
     parseMode = TelegramParseMode.MARKDOWN,
-    replyMarkup = TelegramMarkupContactReplyKeyboard(text = buttonText, cancelButtonText = cancelButtonText)
+    replyMarkup = TelegramMarkupContactReplyKeyboard(text = buttonText, cancelButtonText = cancelButtonText),
+    linkPreviewOptions = linkPreviewOptions
 )
